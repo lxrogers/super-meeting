@@ -5,57 +5,18 @@ html(lang='en', ng-app='')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(href='//fonts.googleapis.com/css?family=Raleway:400,700,900', rel='stylesheet', type='text/css')
     link(href='//fonts.googleapis.com/css?family=Righteous', rel='stylesheet', type='text/css')
-    link(rel='stylesheet', href='stylesheets/normalize.css')
-    link(rel='stylesheet', href='stylesheets/skeleton.css')
-    link(rel='stylesheet', href='stylesheets/custom.css')
-    script(src='javascripts/chatcontroller.js')
+    link(rel='stylesheet', href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/skeleton.css')
+    link(rel='stylesheet', href='/stylesheets/custom.css')
+    #name-param(style='display:none') #{name}
+    block controller
+    
   body
     .section.header
       h1  SUPER MEETING
-    .section.main
-      .container(ng-controller='ChatController')
-        .row(style='margin-bottom: 5%;')
-          h2  How Long Should This Meeting Take?
-        form(ng-submit='vote()')
-          .row
-            select(ng-model='hours', value='0')
-              option(value='0') 0
-              option(value='1') 1
-              option(value='2') 2
-              option(value='3') 3
-              option(value='4') 4
-            |  hrs.
-            select#minutes(ng-model='minutes', value='0')
-              option(value='0') 0
-              option(value='5') 5
-              option(value='10') 10
-              option(value='15') 15
-              option(value='20') 20
-              option(value='25') 25
-              option(value='30') 30
-              option(value='35') 35
-              option(value='40') 40
-              option(value='45') 45
-              option(value='5') 50
-              option(value='55') 55
-            |  min.
-          .row
-            // <div class="span2"><input type="text" class="input-block-level" ng-model="name" ng-change="setName()" placeholder="Your Name"></div>
-            input#vote-button(type='submit', value='VOTE')
-    .section.waiting
-      .container
-        .row
-          h3  Waiting for Others...
-    .section.data
-      .container
-        .row
-          h3  Voting Results
-        .row
-          #canvas.twelve.column
-            canvas#projector Your browser does not support the Canvas element.
-        .row
-          h3  DO YOUR MEETING IN
-          h1#time
+    block content
+    
     script(src='/socket.io/socket.io.js')
     script(src='/javascripts/jquery.min.js')
     script(src='/javascripts/angular.min.js')
+    

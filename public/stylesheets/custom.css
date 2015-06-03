@@ -28,7 +28,19 @@ body {
     color: #000;
 }
 
+input[type='text'] {
+    color: #000;
+    height: 100px;
+    width: 50%;
+    font-size: 2em;
+    text-align: center;
+}
 .section.data {
+    margin-top: 5%;
+    display:none;
+}
+
+.section.leader {
     margin-top: 5%;
     display:none;
 }

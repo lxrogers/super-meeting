@@ -16,25 +16,33 @@ app.set('port', process.env.PORT || 3000);
 app.set('ip', process.env.IP || "0.0.0.0");
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
+app.set('view options', {
+    layout: false
+});
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(express.static('public'));
+app.use(express.bodyParser());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+app.get('/', routes.index);
+app.get('/:name', routes.index);
+app.get('/:name/:room', routes.meeting);
 
-app.get('/:num', routes.index);
 var server = http.createServer(app);
 var io = socketio.listen(server);
 
 console.log("begin");
 var sockets = [];
-var votes_in_minutes = [];
+var rooms = [];
+
+app.set('rooms', rooms);
 
 
 io.on('connection', function (socket) {
@@ -46,15 +54,28 @@ io.on('connection', function (socket) {
       console.log("disconnect");
     });
     
-    socket.on('vote', function(hours, minutes) {
-      votes_in_minutes.push(toMinutes(hours, minutes));
-      console.log(votes_in_minutes);
+    socket.on('vote', function(name, hours, minutes) {
+      console.log("received vote " + hours + " " + minutes + " from " + name + "'s room");
       
-      if(votes_in_minutes.length >= NUM_VOTES) {
-        console.log("all votes received");
-        io.sockets.emit('vote-data', votes_in_minutes);
+      for (var i = 0; i < rooms.length; i++) {
+        if (rooms[i].leaderName == name) {
+          rooms[i].votes.push(toMinutes(hours, minutes));    
+          console.log(rooms[i].votes);
+          io.sockets.emit('vote-data', name, rooms[i].votes);
+        }
       }
+      console.log(rooms);
+      
     });
+    
+    socket.on('create', function(name, meetingName) {
+      for (var i = 0; i < rooms.length; i++) {
+        if (rooms[i].leaderName == name) {
+          rooms[i].meetingName = meetingName;
+          break;
+        }
+      }
+    })
 
   });
 

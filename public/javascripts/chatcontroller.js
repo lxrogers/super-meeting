@@ -7,9 +7,13 @@ var myvote_minutes;
 
 function ChatController($scope) {
     var socket = io.connect();
+    var name = $('#name-param').html();
+    console.log('im in room named: ' + name);
+    console.log('meeting is called: ' + $('#meeting-name-param').html());
     
     $scope.hours = 0;
     $scope.minutes = 0;
+    $scope.meetingName = 'Team Meeting...'
 
     socket.on('connect', function () {
       console.log("connect");
@@ -19,18 +23,29 @@ function ChatController($scope) {
       $scope.$apply();
     });
     
-    socket.on('vote-data', function(votes) {
-        hideWaiting();
-        showResults(votes); 
+    socket.on('create', function(msg) {
+        $scope.$apply();
+    })
+    
+    socket.on('vote-data', function(name, votes) {
+        console.log("client recieved vote from " + name + "'s room", votes);
+        if (votes.length > 1) {
+            showResults(votes); 
+        }
     });
+
+    $scope.create = function create() {
+        console.log('create');
+        $('.create').hide();
+        $('.leader').show();
+        socket.emit('create', name, $scope.meetingName);
+    }
 
     $scope.vote = function vote() {
       myvote_minutes = toMinutes($scope.hours, $scope.minutes);
-      socket.emit('vote', $scope.hours, $scope.minutes);
+      socket.emit('vote', name, $scope.hours, $scope.minutes);
       
-      hideForms();
-      
-      showWaiting();
+      $('.main').hide();
     };
     
 }
@@ -40,16 +55,8 @@ function toMinutes(hours, minutes) {
   return parseInt(hours) * 60 + parseInt(minutes);
 }
 
-function hideForms() {
-    $('.main').hide();
-}
-
-function showWaiting() {
-    $('.waiting').show();
-}
-
 function hideWaiting() {
-    $('.waiting').hide();
+    
 }
 
 function createLabels(minMinutes, maxMinutes) {

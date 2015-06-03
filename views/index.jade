@@ -1,5 +1,24 @@
 extends layout
-
+block controller
+    script(src='/javascripts/chatcontroller.js')
 block content
-  h1= title
-  p Welcome to #{title}
+    .section.create
+        .container(ng-controller='ChatController')
+            .row(style='margin-top: 5%;')
+                h2  Hi, #{name}!
+            
+            form(ng-submit='create()')
+                .row
+                    h2 
+                       | What's your meeting name?
+                .row
+                    input(type="text", name="name", style='margin-top: 10%;', ng-model='meetingName', value='Team Meeting')
+                .row
+                    input#vote-button(type='submit', value='Create Meeting')
+    .section.leader
+        .container
+            .row(style='margin-top: 5%;')
+                h3 Send this link to your team:
+            .row
+                h3 #{url}
+        
