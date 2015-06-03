@@ -1,0 +1,58 @@
+.section {
+    text-align: center;
+    color: white;
+}
+
+.section.header {
+    background-color: #FF4C65;
+    padding-top: 3%;
+    padding-bottom: 2%;
+    font-family: 'Righteous', cursive;
+}
+
+body {
+    background-color: #27A8E0;
+}
+
+.section.main {
+    margin-top: 10%;
+    font-weight: 700;
+}
+
+.section.waiting {
+    margin-top: 10%;
+    display: none;
+}
+
+.main select {
+    color: #000;
+}
+
+.section.data {
+    margin-top: 5%;
+    display:none;
+}
+
+#vote-button {
+    background-color: #1FDA9A;
+    margin: 15%;
+    padding: 5%;
+    height: 5%;
+    font-size: 3em;
+    border: 2px solid #DDD;
+    color: #FFF;
+}
+
+#canvas {
+    margin-bottom: 5%;
+    padding: 5%;
+  	opacity: 1;
+  	display: none;
+  	border: 2px solid;
+  	border-radius: 20px;
+  	background-color: #2089B6;
+}
+
+#time {
+    font-weight: 900;
+}
