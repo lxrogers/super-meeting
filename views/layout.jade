@@ -16,6 +16,14 @@ html(lang='en', ng-app='')
       h1  SUPER MEETING
     block content
     
+    .section.report(style="display:none")
+      .container
+        .row(style='margin-top: 10%;')
+            h2
+              Meeting Over!
+            h1
+              #feedback 
+              minutes
     script(src='/socket.io/socket.io.js')
     script(src='/javascripts/jquery.min.js')
     script(src='/javascripts/angular.min.js')

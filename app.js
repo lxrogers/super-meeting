@@ -72,8 +72,8 @@ io.on('connection', function (socket) {
       io.sockets.emit('start', name);
     })
     
-    socket.on('end', function(name) {
-      io.sockets.emit('end', name);
+    socket.on('end', function(name, difference) {
+      io.sockets.emit('end', name, difference);
     })
     
     socket.on('create', function(name, meetingName) {

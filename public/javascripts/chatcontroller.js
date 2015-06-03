@@ -4,6 +4,8 @@ var LABEL_COLOR = '#FFF'
 var CIRCLE_COLOR_1 = 'rgba(232, 183, 26, .7)';
 var CIRCLE_COLOR_2 = 'rgba(31, 218, 154, .7)';
 var myvote_minutes;
+var goal_minutes = 0;
+var minutes = 0;
 
 function ChatController($scope) {
     var socket = io.connect();
@@ -27,11 +29,15 @@ function ChatController($scope) {
         $scope.$apply();
     })
     
-    socket.on('end', function(name_) {
+    socket.on('end', function(name_, difference) {
         if (name_ == name) {
+            console.log('diff:' + difference);
             $('.go').hide();
             $('.end').hide();
-        }    
+            $('#feedback').html(difference);
+            $('.report').show();
+            
+        }
     });
     
     socket.on('start', function(name_) {
@@ -46,7 +52,7 @@ function ChatController($scope) {
             return;
         }
         console.log("client recieved vote from " + name + "'s room", votes);
-        if (votes.length > 0) {
+        if (votes.length > 1) {
             $('.waiting').hide();
             showResults(votes);
             $('.start').show();
@@ -55,7 +61,9 @@ function ChatController($scope) {
     });
     
     $scope.end = function end() {
-        socket.emit('end', name);
+        var difference = goal_minutes - minutes;
+        console.log('goal: ' + goal_minutes + " : minutes: " + minutes);
+        socket.emit('end', name, difference);
     }
     
     $scope.start = function start() {
@@ -63,6 +71,10 @@ function ChatController($scope) {
         $('.leader').hide();
         $('.end').show();
         socket.emit('start', name);
+        setInterval(function() {
+            console.log("HEY");
+            minutes += 1;
+        }, 600);
     }
     
     $scope.create = function create() {
@@ -84,7 +96,7 @@ function ChatController($scope) {
 
 function toMinutes(hours, minutes) {
     console.log('tominutes',hours, minutes);
-  return parseInt(hours) * 60 + parseInt(minutes);
+    return parseInt(hours) * 60 + parseInt(minutes);
 }
 
 function createLabels(minMinutes, maxMinutes) {
@@ -100,7 +112,14 @@ function createLabels(minMinutes, maxMinutes) {
 
 function createLabel(minutes) {
     var hour = Math.floor(minutes / 60);
-    var minute = (minutes % 60 == 0) ? '00' : minutes % 60;
+    var minute = minutes % 60;
+    if (minutes % 60 == 0) {
+        minute = '00';
+    }
+    else if (minutes % 60 == 5) {
+        minute = '05';
+    }
+    
     return "" + hour + ":" + minute;
 }
 
@@ -147,7 +166,7 @@ function clearCanvas() {
 function drawCircles(votes, num_labels) {
     var min = Math.min.apply(Math, votes);
     var max = Math.max.apply(Math, votes);
-    var range = max - min;
+    var range = Math.max(max - min, 1);
     
     for (var i = 0; i < votes.length; i++) {
         if (votes[i] == myvote_minutes) {
@@ -188,6 +207,7 @@ function squeeze(x, rate) {
 
 function secondLowestTime(votes) {
     var second_min = secondMin(votes);
+    goal_minutes = second_min;
     var hour = Math.floor(second_min / 60);
     var minute = (second_min % 60 == 0) ? '00' : second_min % 60;
     return "" + hour + " HOURS AND " + minute + " MINUTES";
@@ -197,9 +217,13 @@ function secondLowestTime(votes) {
 function secondMin(values) {
     var min = Math.min.apply(Math, values);
     var newSet = [];
+    var skipped = false;
     for (var x = 0; x < values.length; x++) {
-        if (values[x] !== min) {
+        if (values[x] !== min || skipped) {
             newSet.push(values[x]);
+        }
+        else {
+            skipped = true;
         }
     }
     return Math.min.apply(Math, newSet);
