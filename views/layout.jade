@@ -19,11 +19,13 @@ html(lang='en', ng-app='')
     .section.report(style="display:none")
       .container
         .row(style='margin-top: 10%;')
-            h2
-              Meeting Over!
-            h1
+            h2 Meeting Over!
+        .row
+            h1 
               #feedback 
-              minutes
+        .row
+            h2 Minutes
+              
     script(src='/socket.io/socket.io.js')
     script(src='/javascripts/jquery.min.js')
     script(src='/javascripts/angular.min.js')

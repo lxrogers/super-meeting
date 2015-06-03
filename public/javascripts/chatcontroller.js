@@ -31,10 +31,18 @@ function ChatController($scope) {
     
     socket.on('end', function(name_, difference) {
         if (name_ == name) {
-            console.log('diff:' + difference);
+            var the_difference = "";
+            if (difference > 0) {
+                the_difference = difference + "Minutes Under!"
+            }
+            else {
+                the_difference = (-1 * difference) + "Minutes Over!";
+            }
+            
+            
             $('.go').hide();
             $('.end').hide();
-            $('#feedback').html(difference);
+            $('#feedback').html(the_difference);
             $('.report').show();
             
         }
@@ -72,9 +80,8 @@ function ChatController($scope) {
         $('.end').show();
         socket.emit('start', name);
         setInterval(function() {
-            console.log("HEY");
             minutes += 1;
-        }, 600);
+        }, 60000);
     }
     
     $scope.create = function create() {
@@ -143,7 +150,7 @@ function initCanvas() {
     }
     resizeCanvas();
     //clearCanvas();
-    var textSize = canvas.height / 5;
+    var textSize = canvas.height / 10;
     console.log(canvas.width);
     context.font = textSize + "pt Raleway";
     context.fillStyle = '#000';
@@ -184,7 +191,7 @@ function drawCircle(xpct, color) {
 	context.fillStyle = color;
 	context.beginPath();
 	var xpos = squeeze(xpct * canvas.width, .8);
-	context.arc(xpos, canvas.height * 1 / 3, canvas.height / 5, 0, Math.PI * 2, true);
+	context.arc(xpos, canvas.height * 1 / 3, canvas.height / 8, 0, Math.PI * 2, true);
 	context.closePath();
 	context.fill();
 }
