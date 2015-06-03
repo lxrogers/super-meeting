@@ -15,7 +15,6 @@ body {
 }
 
 .section.main {
-    margin-top: 10%;
     font-weight: 700;
 }
 
@@ -47,7 +46,7 @@ input[type='text'] {
 
 #vote-button {
     background-color: #1FDA9A;
-    margin: 15%;
+    margin: 10%;
     padding: 5%;
     height: 5%;
     font-size: 3em;
@@ -64,7 +63,6 @@ input[type='text'] {
   	border-radius: 20px;
   	background-color: #2089B6;
 }
-
-#time {
-    font-weight: 900;
+h1 {
+   font-weight: 900;   
 }

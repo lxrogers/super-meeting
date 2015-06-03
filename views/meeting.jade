@@ -3,7 +3,7 @@ block controller
   script(src='/javascripts/chatcontroller.js')
 block content
   #meeting-name-param(style='display:none') #{meetingName}
-  .section.main
+  .section.main(style="margin-top: 10%;")
       .container(ng-controller='ChatController')
         .row(style='margin-bottom: 5%;')
           h2  How Long Should #{meetingName} Take?
@@ -47,4 +47,8 @@ block content
         .row
           h3  DO YOUR MEETING IN
           h1#time
+    .section.go(style="display:none")
+      .container
+        .row(style='margin-top: 10%;')
+            h1  GO! Make your time count!
           

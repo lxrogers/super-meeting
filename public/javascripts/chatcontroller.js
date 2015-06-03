@@ -27,25 +27,57 @@ function ChatController($scope) {
         $scope.$apply();
     })
     
-    socket.on('vote-data', function(name, votes) {
-        console.log("client recieved vote from " + name + "'s room", votes);
-        if (votes.length > 1) {
-            showResults(votes); 
+    socket.on('end', function(name_) {
+        if (name_ == name) {
+            $('.go').hide();
+            $('.end').hide();
+        }    
+    });
+    
+    socket.on('start', function(name_) {
+        if (name_ == name) {
+            $('.data').hide();
+            $('.go').show();
         }
     });
-
+    
+    socket.on('vote-data', function(name_, votes) {
+        if (name_ != name) {
+            return;
+        }
+        console.log("client recieved vote from " + name + "'s room", votes);
+        if (votes.length > 0) {
+            $('.waiting').hide();
+            showResults(votes);
+            $('.start').show();
+            
+        }
+    });
+    
+    $scope.end = function end() {
+        socket.emit('end', name);
+    }
+    
+    $scope.start = function start() {
+        $('.start').hide();
+        $('.leader').hide();
+        $('.end').show();
+        socket.emit('start', name);
+    }
+    
     $scope.create = function create() {
         console.log('create');
         $('.create').hide();
         $('.leader').show();
         socket.emit('create', name, $scope.meetingName);
+        $('.main').show();
     }
 
     $scope.vote = function vote() {
       myvote_minutes = toMinutes($scope.hours, $scope.minutes);
       socket.emit('vote', name, $scope.hours, $scope.minutes);
-      
       $('.main').hide();
+      $('.waiting').show();
     };
     
 }
@@ -53,10 +85,6 @@ function ChatController($scope) {
 function toMinutes(hours, minutes) {
     console.log('tominutes',hours, minutes);
   return parseInt(hours) * 60 + parseInt(minutes);
-}
-
-function hideWaiting() {
-    
 }
 
 function createLabels(minMinutes, maxMinutes) {

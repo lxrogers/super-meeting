@@ -68,6 +68,14 @@ io.on('connection', function (socket) {
       
     });
     
+    socket.on('start', function(name) {
+      io.sockets.emit('start', name);
+    })
+    
+    socket.on('end', function(name) {
+      io.sockets.emit('end', name);
+    })
+    
     socket.on('create', function(name, meetingName) {
       for (var i = 0; i < rooms.length; i++) {
         if (rooms[i].leaderName == name) {
