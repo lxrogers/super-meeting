@@ -39,19 +39,9 @@ block content
               option(value='4') 4
             |  hrs.
             select#minutes(ng-model='minutes', value='0')
-              option(value='0') 0
-              option(value='5') 5
-              option(value='10') 10
-              option(value='15') 15
-              option(value='20') 20
-              option(value='25') 25
-              option(value='30') 30
-              option(value='35') 35
-              option(value='40') 40
-              option(value='45') 45
-              option(value='5') 50
-              option(value='55') 55
-            |  min.
+              -for(var i = 1;i<60;i++){
+              option(value="#{i}") #{i}
+              -}
           .row
             // <div class="span2"><input type="text" class="input-block-level" ng-model="name" ng-change="setName()" placeholder="Your Name"></div>
             input#vote-button(type='submit', value='VOTE')
