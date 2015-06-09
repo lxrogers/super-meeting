@@ -108,12 +108,8 @@ function toMinutes(hours, minutes) {
 
 function createLabels(minMinutes, maxMinutes) {
     var labels = [];
-    var numLabels = (maxMinutes - minMinutes) / 15;
-    for (var x = 0; x <= numLabels; x++) {
-        var currentMinutes = minMinutes + (x * 15);
-        
-        labels.push(createLabel(currentMinutes));
-    }
+    labels.push(createLabel(minMinutes));
+    labels.push(createLabel(maxMinutes));
     return labels;
 }
 
@@ -123,8 +119,8 @@ function createLabel(minutes) {
     if (minutes % 60 == 0) {
         minute = '00';
     }
-    else if (minutes % 60 == 5) {
-        minute = '05';
+    else if ((minutes % 60) < 10) {
+        minute = "0" + (minutes % 60);
     }
     
     return "" + hour + ":" + minute;
